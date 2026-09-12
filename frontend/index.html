@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5G Anomaly Detector</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="scanline"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="brand-mark">&gt;_</span>
+      <div class="brand-text">
+        <span class="brand-title">5G ANOMALY DETECTOR</span>
+        <span class="brand-sub">Transformer-based network log classification</span>
+      </div>
+    </div>
+    <div class="status" id="modelStatus">
+      <span class="status-dot" id="statusDot"></span>
+      <span id="statusText">Connecting…</span>
+    </div>
+  </div>
+</header>
+
+<main class="shell">
+
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-tab="quick" role="tab" aria-selected="true">Quick Test</button>
+    <button class="tab" data-tab="batch" role="tab" aria-selected="false">Batch CSV</button>
+  </nav>
+
+  <!-- ============ QUICK TEST ============ -->
+  <section class="panel" id="panel-quick" data-panel>
+    <div class="panel-grid">
+
+      <div class="card">
+        <h2 class="card-title">Log fields</h2>
+        <p class="card-hint">
+          These fields carry the strongest signal per the model's own attention
+          analysis. Any field left blank defaults to 0 (or "unknown" for
+          Protocol) — consistent with how the training pipeline treats missing
+          values.
+        </p>
+        <form id="quickForm" class="field-grid"></form>
+        <button type="submit" form="quickForm" class="btn btn-primary" id="analyzeBtn">
+          Analyze log
+        </button>
+      </div>
+
+      <div class="card result-card" id="quickResult">
+        <div class="empty-state">
+          <span class="empty-glyph">◌</span>
+          <p>Submit a log to see the verdict and explanation here.</p>
+        </div>
+      </div>
+
+    </div>
+    <p class="latency-note">Quick Test computes attention + SHAP + LIME together (a few seconds) - useful for demos, not for high-throughput scanning.</p>
+  </section>
+
+  <!-- ============ BATCH CSV ============ -->
+  <section class="panel hidden" id="panel-batch" data-panel>
+    <div class="card">
+      <h2 class="card-title">Upload a log file</h2>
+      <p class="card-hint">
+        CSV with the same columns the model was trained on. Up to 500 rows per
+        upload. Unrecognised columns are ignored; missing ones default the
+        same way as Quick Test. Batch results show attention only (fast) -
+        click "Full explain" on any row for SHAP + LIME too.
+      </p>
+
+      <label class="dropzone" id="dropzone" for="csvInput">
+        <input type="file" id="csvInput" accept=".csv" hidden>
+        <span class="dropzone-glyph">⇪</span>
+        <span id="dropzoneLabel">Drop a .csv file here, or click to browse</span>
+      </label>
+
+      <button class="btn btn-primary" id="batchAnalyzeBtn" disabled>Analyze batch</button>
+    </div>
+
+    <div class="card hidden" id="batchSummaryCard">
+      <div class="summary-row">
+        <div class="summary-stat">
+          <span class="summary-value" id="summaryTotal">0</span>
+          <span class="summary-label">rows analyzed</span>
+        </div>
+        <div class="summary-stat">
+          <span class="summary-value anomaly-color" id="summaryAnomalies">0</span>
+          <span class="summary-label">flagged anomalous</span>
+        </div>
+        <div class="summary-stat">
+          <span class="summary-value" id="summaryRate">0%</span>
+          <span class="summary-label">anomaly rate</span>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="results-table" id="resultsTable">
+          <thead>
+            <tr><th>Row</th><th>Verdict</th><th>Attack Type</th><th>Confidence</th><th>Top signal</th><th></th></tr>
+          </thead>
+          <tbody id="resultsBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<template id="explanationBarTemplate">
+  <div class="exp-row">
+    <span class="exp-token"></span>
+    <div class="exp-bar-track"><div class="exp-bar-fill"></div></div>
+    <span class="exp-weight"></span>
+  </div>
+</template>
+
+<template id="methodBlockTemplate">
+  <div class="method-block">
+    <div class="exp-title"></div>
+    <div class="method-rows"></div>
+  </div>
+</template>
+
+<script src="app.js"></script>
+</body>
+</html>

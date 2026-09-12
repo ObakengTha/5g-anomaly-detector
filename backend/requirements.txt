@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+torch
+pandas
+numpy
+python-multipart
+shap
+lime

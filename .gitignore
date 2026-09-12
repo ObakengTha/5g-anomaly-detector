@@ -1,0 +1,8 @@
+﻿backend/venv/
+backend/__pycache__/
+**/__pycache__/
+*.pyc
+
+backend/artifacts/*.pt
+backend/artifacts/*.json
+!backend/artifacts/PUT_MODEL_FILES_HERE.txt
