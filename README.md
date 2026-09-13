@@ -18,30 +18,7 @@ anomaly_web_app/
     ├── style.css
     └── app.js
 ```
-
-## 1. Get the model artifacts
-
-In Colab, run `Honours_Research.ipynb` (or `Honours_Research_Synthetic.ipynb`)
-through **Section 13: Model Export** (this comes right after the new
-**Section 12: Multi-Class Attack Type Classification**, which trains the
-attack-typing model on top of the binary detector you already had).
-
-That produces **six** files in your Colab working directory:
-
-- `transformer_model.pt` — the binary BENIGN/ANOMALY detector
-- `multiclass_model.pt` — the attack-type classifier (only used when the
-  binary model says ANOMALY)
-- `vocab.json`
-- `inference_config.json`
-- `attack_label_map.json` — maps the multiclass model's output index to an
-  attack type name
-- `background_samples.json` — a small sample of training sequences that
-  SHAP's `KernelExplainer` needs as a reference distribution; the web app
-  has no other way to get this once it's running standalone
-
-Download all six and place them in `backend/artifacts/`.
-
-## 2. Set up the backend (VS Code)
+## 1. Set up the backend (VS Code)
 
 ```bash
 cd backend
@@ -59,7 +36,7 @@ pip install -r requirements.txt
 `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser` once,
 or use `venv\Scripts\activate.bat` instead.)
 
-## 3. Run it
+## 2. Run it
 
 ```bash
 uvicorn main:app --reload --port 8000
@@ -69,7 +46,7 @@ Open **http://127.0.0.1:8000**. The status dot should turn green ("Model
 loaded"). If it's red, check the terminal — almost always a missing/misnamed
 file in `backend/artifacts/`.
 
-## Using it
+## 3. Using it
 
 **Quick Test tab** — fill in the fields the model's attention analysis
 identified as informative. Submitting computes **all three** explanation
@@ -110,20 +87,3 @@ head). Two things worth knowing:
   label for a rare category without checking that model's classification
   report in the notebook first.
 
-## Known limitations to keep in mind
-
-- **Bin edges are frozen at export time.** If your training data's
-  distribution shifts significantly later, re-run Section 13 and replace
-  all six files in `artifacts/` together — don't mix files from different
-  export runs.
-- **`model.py` must stay in sync with the notebook's architecture.** If you
-  change `TransformerAnomalyDetector` in the notebook, mirror the exact same
-  change here.
-- **CSV batch caps at 500 rows per request.** Raise the limit in
-  `main.py`'s `predict_csv` if needed.
-- **SHAP/LIME use only 30 background samples** (exported from training) to
-  keep explanations fast enough to be usable interactively. This is a
-  smaller reference set than the notebook itself uses for its own SHAP/LIME
-  analysis - fine for a live demo, but don't treat the app's SHAP/LIME
-  output as a substitute for the more thorough comparison already in the
-  notebook's Section 11.
