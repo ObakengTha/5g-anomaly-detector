@@ -9,7 +9,7 @@ SHAP, and LIME** together.
 anomaly_web_app/
 ├── backend/
 │   ├── main.py              FastAPI app: endpoints + startup
-│   ├── model.py              Model architecture (must match the notebook exactly)
+│   ├── model.py              Model architecture 
 │   ├── preprocessing.py      Tokenisation, mirrors the notebook's pipeline
 │   ├── requirements.txt
 │   └── artifacts/            
