@@ -12,7 +12,7 @@ anomaly_web_app/
 │   ├── model.py              Model architecture (must match the notebook exactly)
 │   ├── preprocessing.py      Tokenisation, mirrors the notebook's pipeline
 │   ├── requirements.txt
-│   └── artifacts/            Put your exported model files here (see below)
+│   └── artifacts/            
 └── frontend/
     ├── index.html
     ├── style.css
