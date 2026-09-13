@@ -18,7 +18,29 @@ anomaly_web_app/
     ├── style.css
     └── app.js
 ```
-## 1. Set up the backend (VS Code)
+
+1. Get the model artifacts
+
+You need six files in backend/artifacts/ before this app will run:
+
+transformer_model.pt — the binary BENIGN/ANOMALY detector
+multiclass_model.pt — the attack-type classifier (only used when the binary model says ANOMALY)
+vocab.json
+inference_config.json
+attack_label_map.json — maps the multiclass model's output index to an attack type name
+background_samples.json — a small sample of training sequences that SHAP's KernelExplainer needs as a reference distribution; the web app has no other way to get this once it's running standalone
+
+These are not included in this repository — they're large trained model files, which don't belong in git. Get them this way:
+
+Download the pre-trained files
+
+Download all six files from this shared folder:
+
+https://drive.google.com/drive/folders/1jszGF5Pzw1Y9fY2sJcfskYU8HmVtVy5y?usp=drive_link
+
+Place them directly in backend/artifacts/, then skip to Section 2 below.
+
+## 2. Set up the backend (VS Code)
 
 ```bash
 cd backend
